@@ -1,11 +1,11 @@
 import { Mongo } from "../database/mongo.js"
 import { ObjectId } from 'mongodb'
-import crypto from 'crypto'
 
-const collectionName = 'users'
 
-export default class UsersDataAccess {
-    async getUsers() {
+const collectionName = 'plates'
+
+export default class PlatesDataAccess {
+    async getPlates() {
         const result = await Mongo.db
             .collection(collectionName)
             .find({})
@@ -13,41 +13,36 @@ export default class UsersDataAccess {
         return result
     }
 
-    async deleteUser(userId) {
+    async getAvailablePlates() {
         const result = await Mongo.db
             .collection(collectionName)
-            .findOneAndDelete({ _id: new ObjectId(userId) })
+            .find({ available: true })
+            .toArray()
         return result
     }
 
-    async updateUser(userId, userData) {
-        if (userData.password) {
-            const salt = crypto.randomBytes(16)
+    async addPlate(plateData){
+        const result = await Mongo.db
+        .collection(collectionName)
+        .insertOnde(plateData)
 
-            crypto.pbkdf2(userData.password, salt, 310000, 16, 'sha256', async (error, hashedPassword) => {
-                if (error) {
-                    throw new Error('Error during hashing password')
-                }
-                userData = { ...userData, password: hashedPassword, salt}
+        return result
+    }
+
+    async deletePlate(plateId) {
+        const result = await Mongo.db
+            .collection(collectionName)
+            .findOneAndDelete({ _id: new ObjectId(plateId) })
+        return result
+    }
+
+    async updatePlate(plateId, plateData) {
                 const result = await Mongo.db
-                    .collection(collectionName)
-                    .insertOne({
-                        fullname: req.body.fullname,
-                        email: req.body.email,
-                        password: hashedPassword,
-                        salt,
-                    })
-            })
-        } else {
-
-
-            const result = await Mongo.db
                 .collection(collectionName)
                 .findOneAndUpdate(
                     { _id: new ObjectId(userId) },
-                    { $set: userData }
+                    { $set: plateData }
                 )
             return result
         }
-    }
 }
