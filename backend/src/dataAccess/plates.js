@@ -40,7 +40,7 @@ export default class PlatesDataAccess {
                 const result = await Mongo.db
                 .collection(collectionName)
                 .findOneAndUpdate(
-                    { _id: new ObjectId(userId) },
+                    { _id: new ObjectId(plateId) },
                     { $set: plateData }
                 )
             return result
