@@ -1,5 +1,5 @@
-import PlatesDataAccess from '../dataAccess/plates.js'
-import { ok, serverError } from '../helpers/httpResponse.js'
+import PlatesDataAccess from "../dataAccess/plates.js"
+import { ok, serverError } from "../helpers/httpResponses.js"
 
 export default class PlatesControllers {
     constructor() {
@@ -16,15 +16,6 @@ export default class PlatesControllers {
         }
     }
 
-    async addPlate(plateData) {
-        try {
-            const result = await this.dataAccess.addPlate(plateData)
-            return ok(result)
-        } catch (error) {
-            return serverError(error)
-        }
-    }
-
     async getAvailablePlates() {
         try {
             const plates = await this.dataAccess.getAvailablePlates()
@@ -35,9 +26,20 @@ export default class PlatesControllers {
         }
     }
 
+    async addPlate(plateData) {
+        try {
+            const result = await this.dataAccess.addPlate(plateData)
+
+            return ok(result)
+        } catch (error) {
+            return serverError(error)
+        }
+    }
+
     async deletePlate(plateId) {
         try {
             const result = await this.dataAccess.deletePlate(plateId)
+
             return ok(result)
         } catch (error) {
             return serverError(error)
@@ -46,7 +48,8 @@ export default class PlatesControllers {
 
     async updatePlate(plateId, plateData) {
         try {
-            const result = await this.dataAccess.updatePlate(plateId, plateDataData)
+            const result = await this.dataAccess.updatePlate(plateId, plateData)
+
             return ok(result)
         } catch (error) {
             return serverError(error)
