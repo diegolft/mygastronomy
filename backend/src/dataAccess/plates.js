@@ -24,7 +24,7 @@ export default class PlatesDataAccess {
     async addPlate(plateData){
         const result = await Mongo.db
         .collection(collectionName)
-        .insertOnde(plateData)
+        .insertOne(plateData)
 
         return result
     }
